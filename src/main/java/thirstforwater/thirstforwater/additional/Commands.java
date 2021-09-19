@@ -5,14 +5,17 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import thirstforwater.thirstforwater.Thirstforwater;
+import org.jetbrains.annotations.NotNull;
+import thirstforwater.thirstforwater.ThirstForWater;
+
+import java.util.Objects;
 
 public class Commands implements CommandExecutor {
-private Thirstforwater plugin = Thirstforwater.getPlugin(Thirstforwater.class);
-private events pl = new events();
+private final ThirstForWater plugin = ThirstForWater.getPlugin(ThirstForWater.class);
+private final events pl = new events();
 
 @Override
-public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
 	GUICreator GUIcreator = new GUICreator();
 	if (sender instanceof Player) {
 		if (args.length == 0 || args[0].equals("help")) {
@@ -25,15 +28,15 @@ public boolean onCommand(CommandSender sender, Command command, String label, St
 				plugin.getServer().getPluginManager().enablePlugin(plugin);
 				sender.sendMessage(ChatColor.GOLD + "[ThirstForWater]: Plugin reloaded");
 			} else {
-				String txt = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Nopermission"));
+				String txt = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("Nopermission")));
 				sender.sendMessage(txt);
 			}
 			return true;
 		} else if (args[0].equals("settings")) {
 			if (sender.isOp() || sender.hasPermission("Thirstforwater.tfw.settings")) {
-				GUIcreator.open(((Player) sender).getPlayer());
+				GUIcreator.open(Objects.requireNonNull(((Player) sender).getPlayer()));
 			} else {
-				String txt = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Nopermission"));
+				String txt = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("Nopermission")));
 				sender.sendMessage(txt);
 			}
 			return true;
@@ -45,7 +48,7 @@ public boolean onCommand(CommandSender sender, Command command, String label, St
 				plugin.getServer().getPluginManager().enablePlugin(plugin);
 				sender.sendMessage(ChatColor.RED + "ThirstForWater disabled");
 			} else {
-				String txt = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Nopermission"));
+				String txt = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("Nopermission")));
 				sender.sendMessage(txt);
 			}
 		} else if (args[0].equals("enable")) {
@@ -56,7 +59,7 @@ public boolean onCommand(CommandSender sender, Command command, String label, St
 				plugin.getServer().getPluginManager().enablePlugin(plugin);
 				sender.sendMessage(ChatColor.RED + "ThirstForWater enabled");
 			} else {
-				String txt = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Nopermission"));
+				String txt = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("Nopermission")));
 				sender.sendMessage(txt);
 			}
 		} else {

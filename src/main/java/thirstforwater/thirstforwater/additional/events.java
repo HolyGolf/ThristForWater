@@ -21,7 +21,7 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
-import thirstforwater.thirstforwater.Thirstforwater;
+import thirstforwater.thirstforwater.ThirstForWater;
 
 import java.util.*;
 
@@ -29,7 +29,7 @@ import static org.bukkit.Bukkit.getServer;
 import static org.bukkit.event.block.Action.RIGHT_CLICK_AIR;
 
 public class events implements Listener {
-	private Thirstforwater plugin = Thirstforwater.getPlugin(Thirstforwater.class);
+	private final ThirstForWater plugin = ThirstForWater.getPlugin(ThirstForWater.class);
 	public static HashMap<UUID, Integer> list = new HashMap<>();
 	public static HashMap<String, Integer> worlds = new HashMap<>();
 	public static HashMap<UUID, Double> sprint = new HashMap<>();
@@ -110,17 +110,17 @@ public void thirst() {
 							list.replace(p.getUniqueId(), thir);
 							time.replace(p.getUniqueId(), 0.0);
 							if (plugin.getConfig().getBoolean("debug") && p.hasPermission("Thirstforwater.noThirst.debug")) {
-								p.sendMessage(ChatColor.RED + "Thirst -1: " + +list.get(p.getUniqueId()));
+								p.sendMessage(ChatColor.RED + "Thirst -1: " + list.get(p.getUniqueId()));
 							}
 						}
 					}
 				}
 				if (plugin.getConfig().getBoolean("messages") && !plugin.getConfig().getBoolean("Actionbar")) {
 					if (list.get(p.getUniqueId()) > 100) {
-						String txt = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("HighWaterMessage"));
+						String txt = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("HighWaterMessage")));
 						messag(p, txt);
 					} else if (list.get(p.getUniqueId()) <= 19) {
-						String txt = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("LowWaterMessage"));
+						String txt = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("LowWaterMessage")));
 						messag(p, txt);
 					}
 				}
@@ -145,13 +145,13 @@ public void monitor() {
 			if ((p.getGameMode() != GameMode.CREATIVE) && (p.getGameMode() != GameMode.SPECTATOR) && (!p.hasPermission("Thirstforwater.noThirst")) && (worlds.containsKey(p.getWorld().getName()))) {
 				if (plugin.getConfig().getBoolean("Actionbar")) {
 					if (list.get(p.getUniqueId()) <= 0) {
-						String message = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Indicator_empty"));
+						String message = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("Indicator_empty")));
 						messag(p, message);
 					} else if (list.get(p.getUniqueId()) > 100) {
-						String message = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Indicator_full"));
+						String message = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("Indicator_full")));
 						messag(p, message);
 					} else {
-						messag(p, ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Char_before_Indicator")) + getProgressBar(list.get(p.getUniqueId()), 100, 20) + ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Char_after_Indicator")));
+						messag(p, ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("Char_before_Indicator"))) + getProgressBar(list.get(p.getUniqueId()), 100, 20) + ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("Char_after_Indicator"))));
 					}
 				}
 			}
@@ -162,7 +162,7 @@ public void monitor() {
 public String getProgressBar(int current, int max, int totalBars) {
 	float percent = (float) current / max;
 	int progressBars = (int) (totalBars * percent);
-	return Strings.repeat("" + ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Char1")), progressBars) + Strings.repeat("" + ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Char2")), totalBars - progressBars);
+	return Strings.repeat("" + ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("Char1"))), progressBars) + Strings.repeat("" + ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("Char2"))), totalBars - progressBars);
 }
 
 @EventHandler
@@ -224,7 +224,7 @@ public void onPlayerRespawn(PlayerRespawnEvent player){
 // I don't know how this works, but this works. Nice.
 @EventHandler
 public void onPlayerEvent(PlayerItemConsumeEvent event) {
-	if (event.getItem().getType() == Material.POTION && event.getItem().hasItemMeta() && event.getItem().getItemMeta().hasDisplayName() && event.getItem().getItemMeta().hasLore() && event.getItem().getItemMeta().getLore().contains(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("WaterLore"))) && event.getItem().getItemMeta().getDisplayName().equals(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("WaterName")))) {
+	if (event.getItem().getType() == Material.POTION && event.getItem().hasItemMeta() && Objects.requireNonNull(event.getItem().getItemMeta()).hasDisplayName() && event.getItem().getItemMeta().hasLore() && Objects.requireNonNull(event.getItem().getItemMeta().getLore()).contains(ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("WaterLore")))) && event.getItem().getItemMeta().getDisplayName().equals(ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("WaterName"))))) {
 		if ((list.get(event.getPlayer().getUniqueId()) + plugin.getConfig().getInt("WaterRecoveryClearWater")) <= 110) {
 			int gg = list.get(event.getPlayer().getUniqueId()) + plugin.getConfig().getInt("WaterRecoveryClearWater");
 			list.replace(event.getPlayer().getUniqueId(), gg);
@@ -237,27 +237,30 @@ public void onPlayerEvent(PlayerItemConsumeEvent event) {
 				event.getPlayer().sendMessage("Added water, full, clear water");
 			}
 		}
-	} else if (event.getItem() != null && event.getItem().getItemMeta() != null && event.getItem().getItemMeta() instanceof PotionMeta) {
-		PotionType potionType = ((PotionMeta) event.getItem().getItemMeta()).getBasePotionData().getType();
-		if (potionType == PotionType.WATER) {
-			Random r = new Random();
-			int ran = r.nextInt(101);
-			if (ran <= plugin.getConfig().getInt("Poisoning bottle chance")) {
-				event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.POISON, (plugin.getConfig().getInt("Poisoning duration") * 20 ), 1));
-				if (plugin.getConfig().getBoolean("debug") && event.getPlayer().hasPermission("Thirstforwater.noThirst.debug")) {
-					event.getPlayer().sendMessage("Poisoning");
+	} else {
+		event.getItem();
+		if (event.getItem().getItemMeta() != null && event.getItem().getItemMeta() instanceof PotionMeta) {
+			PotionType potionType = ((PotionMeta) event.getItem().getItemMeta()).getBasePotionData().getType();
+			if (potionType == PotionType.WATER) {
+				Random r = new Random();
+				int ran = r.nextInt(101);
+				if (ran <= plugin.getConfig().getInt("Poisoning bottle chance")) {
+					event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.POISON, (plugin.getConfig().getInt("Poisoning duration") * 20 ), 1));
+					if (plugin.getConfig().getBoolean("debug") && event.getPlayer().hasPermission("Thirstforwater.noThirst.debug")) {
+						event.getPlayer().sendMessage("Poisoning");
+					}
 				}
-			}
-			if ((list.get(event.getPlayer().getUniqueId()) + plugin.getConfig().getInt("WaterRecoveryBottle")) <= 110) {
-				int gg = list.get(event.getPlayer().getUniqueId()) + plugin.getConfig().getInt("WaterRecoveryBottle");
-				list.replace(event.getPlayer().getUniqueId(), gg);
-				if (plugin.getConfig().getBoolean("debug") && event.getPlayer().hasPermission("Thirstforwater.noThirst.debug")) {
-					event.getPlayer().sendMessage("Added water, bottle");
-				}
-			} else {
-				list.replace(event.getPlayer().getUniqueId(), 110);
-				if (plugin.getConfig().getBoolean("debug") && event.getPlayer().hasPermission("Thirstforwater.noThirst.debug")) {
-					event.getPlayer().sendMessage("Added water, full, bottle");
+				if ((list.get(event.getPlayer().getUniqueId()) + plugin.getConfig().getInt("WaterRecoveryBottle")) <= 110) {
+					int gg = list.get(event.getPlayer().getUniqueId()) + plugin.getConfig().getInt("WaterRecoveryBottle");
+					list.replace(event.getPlayer().getUniqueId(), gg);
+					if (plugin.getConfig().getBoolean("debug") && event.getPlayer().hasPermission("Thirstforwater.noThirst.debug")) {
+						event.getPlayer().sendMessage("Added water, bottle");
+					}
+				} else {
+					list.replace(event.getPlayer().getUniqueId(), 110);
+					if (plugin.getConfig().getBoolean("debug") && event.getPlayer().hasPermission("Thirstforwater.noThirst.debug")) {
+						event.getPlayer().sendMessage("Added water, full, bottle");
+					}
 				}
 			}
 		}
@@ -273,10 +276,11 @@ public void addRecipe() {
 	ArrayList<String> lore = new ArrayList<>();
 
 	lore.add(" ");
-	lore.add(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("WaterLore")));
+	lore.add(ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("WaterLore"))));
 	lore.add(" ");
+	assert meta != null;
 	meta.setLore(lore);
-	meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("WaterName")));
+	meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("WaterName"))));
 	water.setItemMeta(meta);
 
 	FurnaceRecipe waters = new FurnaceRecipe(water, wat);

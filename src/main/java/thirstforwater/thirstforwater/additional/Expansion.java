@@ -3,12 +3,15 @@ import com.google.common.base.Strings;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
-import thirstforwater.thirstforwater.Thirstforwater;
+import org.jetbrains.annotations.NotNull;
+import thirstforwater.thirstforwater.ThirstForWater;
+
+import java.util.Objects;
 
 public class Expansion extends PlaceholderExpansion {
-private Thirstforwater plugin;
+private final ThirstForWater plugin;
 
-public Expansion(Thirstforwater plugin){
+public Expansion(ThirstForWater plugin){
 	this.plugin = plugin;
 }
 
@@ -18,24 +21,24 @@ public boolean canRegister(){
 }
 
 @Override
-public String getAuthor(){
+public @NotNull String getAuthor(){
 	return "HolyGolf";
 }
 
 
 @Override
-public String getIdentifier(){
+public @NotNull String getIdentifier(){
 	return "thirst";
 }
 
 
 @Override
-public String getVersion(){
+public @NotNull String getVersion(){
 	return "2.0.2";
 }
 
 @Override
-public String onPlaceholderRequest(Player player, String identifier){
+public String onPlaceholderRequest(Player player, @NotNull String identifier){
 
 	if(player == null){
 		return "";
@@ -75,11 +78,11 @@ public String onPlaceholderRequest(Player player, String identifier){
 	}
 	if(identifier.equals("indicator2")) {
 		if (events.list.get(player.getUniqueId()) > 100) {
-			return ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("PlaceHolder_Indicator2_Indicator_full"));
+			return ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("PlaceHolder_Indicator2_Indicator_full")));
 		} else if (events.list.get(player.getUniqueId()) <= 0) {
-			return ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("PlaceHolder_Indicator2_Indicator_empty"));
+			return ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("PlaceHolder_Indicator2_Indicator_empty")));
 		} else {
-			return ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("PlaceHolder_Indicator2_Char_before_Indicator")) + getProgressBar2(events.list.get(player.getUniqueId()), 100, 20) + ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("PlaceHolder_Indicator2_Char_after_Indicator"));
+			return ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("PlaceHolder_Indicator2_Char_before_Indicator"))) + getProgressBar2(events.list.get(player.getUniqueId()), 100, 20) + ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("PlaceHolder_Indicator2_Char_after_Indicator")));
 		}
 	}
 
@@ -95,6 +98,6 @@ public String getProgressBar(int current, int max, int totalBars, char symbol1, 
 public String getProgressBar2(int current, int max, int totalBars) {
 	float percent = (float) current / max;
 	int progressBars = (int) (totalBars * percent);
-	return Strings.repeat("" + ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("PlaceHolder_Indicator2_Char1")), progressBars) + Strings.repeat("" + ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("PlaceHolder_Indicator2_Char2")), totalBars - progressBars);
+	return Strings.repeat("" + ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("PlaceHolder_Indicator2_Char1"))), progressBars) + Strings.repeat("" + ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("PlaceHolder_Indicator2_Char2"))), totalBars - progressBars);
 }
 }

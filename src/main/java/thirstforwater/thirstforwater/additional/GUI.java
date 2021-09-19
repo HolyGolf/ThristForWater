@@ -11,9 +11,9 @@ import java.util.Map;
 import java.util.UUID;
 
 public class GUI {
-	private UUID uuid;
-	private Inventory inv;
-	private Map<Integer, GUIAction> actions;
+	private final UUID uuid;
+	private final Inventory inv;
+	private final Map<Integer, GUIAction> actions;
 	public static Map<UUID, GUI> inventoriesByUUID = new HashMap<>();
 	public static Map<UUID, UUID> openInventories = new HashMap<>();
 
@@ -39,6 +39,7 @@ public interface GUIAction {
 
 public void setItem(int slot, ItemStack stack, String name, GUIAction action){
 	ItemMeta meta = stack.getItemMeta();
+	assert meta != null;
 	meta.setDisplayName(name);
 	stack.setItemMeta(meta);
 	inv.setItem(slot, stack);
@@ -47,11 +48,7 @@ public void setItem(int slot, ItemStack stack, String name, GUIAction action){
 	}
 }
 
-public void setItem(int slot, ItemStack stack, String name){
-	setItem(slot, stack, name, null);
-}
-
-public void open(Player p){
+	public void open(Player p){
 	p.openInventory(inv);
 	openInventories.put(p.getUniqueId(), getUuid());
 }

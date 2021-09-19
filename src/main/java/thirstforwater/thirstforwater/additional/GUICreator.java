@@ -3,10 +3,10 @@ package thirstforwater.thirstforwater.additional;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import thirstforwater.thirstforwater.Thirstforwater;
+import thirstforwater.thirstforwater.ThirstForWater;
 
 public class GUICreator extends GUI {
-private Thirstforwater plugin = Thirstforwater.getPlugin(Thirstforwater.class);
+private final ThirstForWater plugin = ThirstForWater.getPlugin(ThirstForWater.class);
 
 public GUICreator() {
 	super(54, "Settings");
