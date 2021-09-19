@@ -1,5 +1,11 @@
 [![logo](/images/11.png)](https://www.spigotmc.org/resources/thirstforwater.84634/)
 # ThristForWater
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/HolyGolf/ThirstForWater?style=flat-square)
+![GitHub issues](https://img.shields.io/github/issues/HolyGolf/ThirstForWater?style=flat-square)
+![GitHub last commit](https://img.shields.io/github/last-commit/HolyGolf/ThirstForWater?style=flat-square)
+![GitHub all releases](https://img.shields.io/github/downloads/HolyGolf/ThirstForWater/total?style=flat-square)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/HolyGolf/ThirstForWater?style=flat-square)
+
 This plugin adds a water thirst mechanic that can be quenched by drinking water from a bottle or directly from a reservoir.
 
 ![craft](/images/222.png)
